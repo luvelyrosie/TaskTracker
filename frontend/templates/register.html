@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-box">
+        <h2>Create Account</h2>
+        <form method="post" action="/users/create-user">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <select name="role" required>
+                <option value="user" selected>User</option>
+                <option value="admin">Admin</option>
+            </select>
+
+            <button type="submit">Register</button>
+        </form>
+        {% if error %}
+        <p class="error-message">{{ error }}</p>
+        {% endif %}
+        <p style="text-align:center; margin-top:10px;">
+            Already have an account? 
+            <a href="/users/login-page" class="btn-link">Login</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

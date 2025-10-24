@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Create Task - Task Tracker{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Create New Task</h2>
+
+    <form id="create_task_form" action="/tasks/create" method="post" class="card p-4 shadow-sm mx-auto" style="max-width: 500px;">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" id="title" name="title" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" name="description" rows="3" class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select id="status" name="status_" class="form-select">
+                <option value="todo">To Do</option>
+                <option value="in_progress">In Progress</option>
+                <option value="done">Done</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="start_time_container">
+            <label for="start_time" class="form-label">Start Time</label>
+            <input type="datetime-local" id="start_time" name="start_time" class="form-control">
+        </div>
+
+        <div class="mb-3" id="end_time_container">
+            <label for="end_time" class="form-label">End Time</label>
+            <input type="datetime-local" id="end_time" name="end_time" class="form-control">
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">Create Task</button>
+            <a href="/tasks/" class="btn btn-secondary ms-2">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script>
+const statusSelect = document.getElementById('status');
+const startContainer = document.getElementById('start_time_container');
+const endContainer = document.getElementById('end_time_container');
+const startTimeInput = document.getElementById('start_time');
+const endTimeInput = document.getElementById('end_time');
+
+function toggleTimeFields() {
+    const status = statusSelect.value;
+    const now = new Date();
+    const formattedNow = now.toISOString().slice(0,16);
+
+    if (status === 'todo') {
+        startContainer.style.display = 'none';
+        endContainer.style.display = 'none';
+        startTimeInput.value = '';
+        endTimeInput.value = '';
+    } else if (status === 'in_progress') {
+        startContainer.style.display = 'block';
+        endContainer.style.display = 'none';
+
+        if (!startTimeInput.value) startTimeInput.value = formattedNow;
+        endTimeInput.value = '';
+    } else if (status === 'done') {
+        startContainer.style.display = 'block';
+        endContainer.style.display = 'block';
+        if (!startTimeInput.value) startTimeInput.value = formattedNow;
+        endTimeInput.value = formattedNow;
+    }
+}
+
+toggleTimeFields();
+
+statusSelect.addEventListener('change', toggleTimeFields);
+</script>
+{% endblock %}

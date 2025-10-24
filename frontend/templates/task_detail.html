@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Task Detail - Task Tracker{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-3">{{ task.title }}</h2>
+    <p><strong>Description:</strong> {{ task.description }}</p>
+    <p><strong>Status:</strong> {{ task.status }}</p>
+    <p><strong>Created by:</strong> {{ username }}</p>
+    <p><strong>Start Time:</strong> {{ task.start_time }}</p>
+    <p><strong>End Time:</strong> {{ task.end_time }}</p>
+
+    <div class="mt-4">
+        <a href="/tasks/{{ task.id }}/edit" class="btn btn-warning">Edit Task</a>
+        <a href="/tasks/" class="btn btn-secondary">Back to Dashboard</a>
+        {% if task.status != 'done' %}
+        <button id="mark_done_btn" class="btn btn-primary ms-2">Mark Done</button>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+const markDoneBtn = document.getElementById('mark_done_btn');
+
+if (markDoneBtn) {
+    markDoneBtn.addEventListener('click', async () => {
+        const now = new Date();
+        const formattedNow = now.toISOString().slice(0,16);
+
+        const formData = new FormData();
+        formData.append('title', "{{ task.title }}");
+        formData.append('description', "{{ task.description }}");
+        formData.append('status_', 'done');
+        formData.append('start_time', "{{ task.start_time if task.start_time else now.isoformat() }}");
+        formData.append('end_time', formattedNow);
+
+        const response = await fetch(`/tasks/{{ task.id }}/edit`, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.redirected) {
+            window.location.href = response.url;
+        }
+    });
+}
+</script>
+{% endblock %}

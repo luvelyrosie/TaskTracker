@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Task Tracker{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">TaskTracker</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/tasks">Dashboard</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    {% if username %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/me">Hello, {{ username }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/logout">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/login-page">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/register-page">Register</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="text-center text-muted py-3">
+        &copy; {{ 2025 }} Task Tracker
+    </footer>
+
+    <script src="{{ url_for('static', path='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Task Tracker{% endblock %}
+
+{% block content %}
+<div class="dashboard-container my-5">
+    <h1 class="text-center mb-4">My Tasks</h1>
+
+    <div class="text-center mb-4">
+        <a href="/tasks/create" class="btn btn-success btn-lg">Add Task</a>
+    </div>
+
+    <div class="row g-4">
+        {% if tasks %}
+            {% for task in tasks %}
+            <div class="col-md-4 d-flex">
+                <div class="card task-card flex-fill">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ task.title }}</h4>
+                        <p class="card-text">{{ task.description }}</p>
+                        <p class="card-text"><strong>Status:</strong> {{ task.status }}</p>
+                        <div class="task-buttons mt-3">
+                            <a href="/tasks/{{ task.id }}" class="btn btn-info btn-sm">Details</a>
+                            <a href="/tasks/{{ task.id }}/edit" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="/tasks/{{ task.id }}/delete" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Delete this task?');">Delete</button>
+                            </form>
+                            {% if task.status != 'done' %}
+                                <form action="/tasks/{{ task.id }}/mark-done" method="post">
+                                    <button type="submit" class="btn btn-success btn-sm"> Mark Done</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center">No tasks yet. Create one above!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
